@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "multi-agent-llama-index"
+version = "0.1.0"
+description = "A simple multi-agent example built with llama index."
+authors = ["André Lobo Teixeira <andreloboteixeira@gmail.com>"]
+readme = "README.md"
+packages = [{include = "lobo", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
