@@ -11,18 +11,26 @@ from llama_index.llms.openai import OpenAI
 
 
 async def read_notes(ctx: Context):
-    """Read notes from a markdown file"""
-    try:
-        with open("src/lobo/notes.md", "r") as file:
-            return file.read()
-    except FileNotFoundError:
-        return "No notes file found."
+    """Read notes from a markdown file asynchronously"""
+
+    def _read():
+        try:
+            with open("src/lobo/notes.md", "r") as file:
+                return file.read()
+        except FileNotFoundError:
+            return "No notes file found."
+
+    return await asyncio.to_thread(_read)
 
 
 async def write_refined_todos(ctx: Context, todos: str):
-    """Write refined todos to a markdown file"""
-    with open("src/lobo/refined_todos.md", "w") as file:
-        file.write(todos)
+    """Write refined todos to a markdown file asynchronously"""
+
+    def _write():
+        with open("src/lobo/refined_todos.md", "w") as file:
+            file.write(todos)
+
+    await asyncio.to_thread(_write)
 
 
 def build_notes_organizer_agent(llm: OpenAI):
@@ -76,7 +84,7 @@ async def main():
             """
     )
 
-    # INFO: to see what is happening during the workflow execution 
+    # Print workflow events to follow execution progress
     current_agent = None
     async for event in handler.stream_events():
         if (hasattr(event, 'current_agent_name') and
