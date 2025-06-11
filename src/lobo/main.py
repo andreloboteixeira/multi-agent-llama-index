@@ -70,7 +70,7 @@ async def main():
         },
     )
    
-    handler = workflow.run(
+    handler = await workflow.run(
         user_msg="""
             Organize my notes into refined todos.
             """
