@@ -12,17 +12,25 @@ from llama_index.llms.openai import OpenAI
 
 async def read_notes(ctx: Context):
     """Read notes from a markdown file"""
-    try:
+
+    def _read() -> str:
         with open("src/lobo/notes.md", "r") as file:
             return file.read()
+
+    try:
+        return await asyncio.to_thread(_read)
     except FileNotFoundError:
         return "No notes file found."
 
 
 async def write_refined_todos(ctx: Context, todos: str):
     """Write refined todos to a markdown file"""
-    with open("src/lobo/refined_todos.md", "w") as file:
-        file.write(todos)
+
+    def _write() -> None:
+        with open("src/lobo/refined_todos.md", "w") as file:
+            file.write(todos)
+
+    return await asyncio.to_thread(_write)
 
 
 def build_notes_organizer_agent(llm: OpenAI):
